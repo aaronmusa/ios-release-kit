@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — {{APP_NAME}}</title>
+<meta name="description" content="{{APP_NAME}} collects no personal data. This policy explains what the app stores and where it stays.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0E6E5C;
+    --lime: #D7E64A;
+    --ink: #16211C;
+    --paper: #FBFBF8;
+    --muted: #5B6B64;
+    --hairline: #E4E6E1;
+    --surface: #FFFFFF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --teal: #6FD3B8;
+      --ink: #EDF2EF;
+      --paper: #10251E;
+      --muted: #9DB3AA;
+      --hairline: #2C4A3F;
+      --surface: #17332A;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0 20px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Archivo, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { max-width: 640px; margin: 0 auto; }
+  header { padding: 56px 0 8px; }
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 10px;
+  }
+  h1 { font-size: 34px; font-weight: 800; line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.02em; }
+  h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--teal);
+    margin: 40px 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .effective { color: var(--muted); font-size: 15px; margin: 0; }
+  .lede {
+    font-size: 19px;
+    margin: 28px 0 0;
+    padding: 20px 22px;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+  }
+  p { margin: 0 0 14px; }
+  ul { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 8px; }
+  a { color: var(--teal); text-underline-offset: 2px; }
+  strong { font-weight: 600; }
+  hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 24px; }
+  footer { color: var(--muted); font-size: 15px; }
+  footer a { font-weight: 500; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">{{APP_NAME}}</p>
+    <h1>Privacy Policy</h1>
+    <p class="effective">Effective {{EFFECTIVE_DATE}}</p>
+  </header>
+
+  <p class="lede"><strong>{{APP_NAME}} does not collect your data.</strong> There are no accounts, no analytics, no advertising and no third-party SDKs. I can&rsquo;t see your matches, your players or anything else you put into the app.</p>
+
+  <h2>What the app stores</h2>
+  <p>{{APP_NAME}} saves the following on your iPhone:</p>
+  <ul>
+    <li><strong>Matches</strong> — scores, the rally-by-rally event log, timestamps and results.</li>
+    <li><strong>Players</strong> — the names you type into your roster. These are whatever you choose to enter; they never leave your devices.</li>
+    <li><strong>Preferences</strong> — your default match format and scoring settings, and whether you&rsquo;ve seen the intro.</li>
+    <li><strong>A count of how many matches you&rsquo;ve started</strong> — used to apply the free-tier limit. This one number is also kept in your Apple Account&rsquo;s iCloud key-value storage, so the free limit still applies if you reinstall the app or move to a new iPhone. It is a single number with no match details attached, it goes to your own iCloud rather than to me, and it is kept whether or not you&rsquo;ve unlocked the app.</li>
+  </ul>
+
+  <h2>iCloud</h2>
+  <p>If you unlock {{APP_NAME}} and are signed in to iCloud, your matches are mirrored to <strong>your own private iCloud database</strong> so they appear on your other devices and survive a new phone. That database belongs to your Apple Account. It is not a server of mine, and I have no access to it — Apple does not give developers the ability to read a user&rsquo;s private CloudKit data.</p>
+  <p>If you&rsquo;re not signed in to iCloud, or you haven&rsquo;t unlocked the app, your matches and players simply stay on your device. The one exception is the count of matches you&rsquo;ve started, described above, which is kept in your iCloud key-value storage whenever you&rsquo;re signed in to iCloud.</p>
+
+  <h2>Purchases</h2>
+  <p>The one-time unlock is sold and processed by Apple through the App Store. Apple tells the app whether the purchase is owned; it does not tell me who you are. I never see your name, payment details or Apple Account.</p>
+  <p>The app also keeps a note of whether the unlock is owned in your Apple Account&rsquo;s iCloud key-value storage, next to the match count described above. That is what lets your matches start restoring the first time you open the app after reinstalling, rather than the second. It is a single yes or no, it goes to your own iCloud rather than to me, and it holds nothing about the purchase itself.</p>
+
+  <h2>What the app does not do</h2>
+  <ul>
+    <li>No analytics or crash-reporting SDKs.</li>
+    <li>No advertising, and no tracking across apps or websites.</li>
+    <li>No third-party libraries that phone home. The app&rsquo;s only network use is Apple&rsquo;s own iCloud and App Store services.</li>
+    <li>No selling or sharing of personal information, because none is collected.</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>{{APP_NAME}} is a scorekeeper suitable for all ages and collects no personal information from anyone, including children.</p>
+
+  <h2>Deleting your data</h2>
+  <p>Deleting the app removes everything stored on that device. To remove data mirrored to iCloud, go to <strong>Settings &rsaquo; [your name] &rsaquo; iCloud &rsaquo; Manage Account Storage</strong> and delete {{APP_NAME}}&rsquo;s data. You can also delete individual matches inside the app at any time.</p>
+
+  <h2>Changes</h2>
+  <p>If this policy changes, the effective date above changes with it, and the previous versions stay in the page&rsquo;s public history.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></p>
+
+  <hr>
+  <footer>
+    <p><a href="../">{{APP_NAME}}</a> &middot; <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use (EULA)</a></p>
+  </footer>
+</main>
+</body>
+</html>

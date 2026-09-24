@@ -1,0 +1,18 @@
+{
+  "canvas": { "width": 1320, "height": 2868 },
+  "palette": {
+    "gradientTop": "#0E6E5C",
+    "gradientBottom": "#10251E",
+    "accent": "#D7E64A",
+    "caption": "#FFFFFF",
+    "bezel": "#07120F"
+  },
+  "fontPath": "fonts/Archivo-ExtraBold.ttf",
+  "captionSize": 92,
+  "deviceWidthFraction": 0.72,
+  "shots": [
+    { "capture": "01.png", "output": "01-hero.png", "caption": "The one thing\nnobody else shows" },
+    { "capture": "02.png", "output": "02-second.png", "caption": "The second\nbest reason" },
+    { "capture": "03.png", "output": "03-third.png", "caption": "The third" }
+  ]
+}
