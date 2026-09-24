@@ -61,6 +61,19 @@ this document is the row you add, not the list.
    well as a code change.** A shipped policy that no longer describes the app is
    a 5.1.1 problem, and the drift is invisible from inside the codebase.
 
+10. **The CI archive uploads as "TestFlight and App Store".** In Xcode Cloud
+    this is the Archive action's *Deployment Preparation* setting. A build
+    uploaded as *TestFlight Internal Testing Only* installs and tests normally
+    but can never be attached to an App Store version: the Add Build dialog
+    lists it greyed out with no stated reason, and the flag is baked into the
+    upload, so the only fix is a fresh build number under the corrected
+    setting. Verify it before the first submission of a new app, and again
+    after anyone edits the workflow.
+
+11. **The in-app purchases ship in the same submission as the first version.**
+    App Store Connect shows both under *Items Submitted*. A first-release IAP
+    reviewed on its own has no shipping app to live in.
+
 ## Record
 
 | Date | Build | Steps verified | Notes |
