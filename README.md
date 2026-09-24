@@ -75,6 +75,36 @@ Worth knowing, because it is not documented anywhere obvious: an **in-app
 purchase description is capped at 55 characters**, not the ~170 the app-level
 fields allow.
 
+## Hooks
+
+### `hooks/pre-push` and `hooks/install-hooks.sh`
+
+Runs the fast test suite before every push, so a broken commit does not reach a
+branch someone else — or a cloud build watching a tag — picks up. Copy the
+directory into a project, set `{{PACKAGE_DIR}}`, and run the installer once
+after cloning.
+
+Keep the hook to the suite that finishes in seconds without a simulator. A
+pre-push hook that takes three minutes gets bypassed with `--no-verify`, and a
+hook that is routinely bypassed is worse than none.
+
+**If `core.hooksPath` is set globally, git stops looking in `.git/hooks`
+entirely** and every hook installed this way silently stops running. Nothing
+reports it — pushes just quietly stop being checked. A global hooks directory
+has to end each hook by chaining to the repo's own:
+
+```sh
+repo_hook="$(git rev-parse --git-common-dir)/hooks/${0##*/}"
+[ -x "$repo_hook" ] && exec "$repo_hook" "$@"
+```
+
+The installer prints a warning when it detects a global `hooksPath`, since the
+failure is otherwise invisible.
+
+Machine-wide rules — commit message policy, anything that should hold in every
+repo regardless of what is checked in — belong in that global dispatcher rather
+than here. A rule a project can delete is not a rule.
+
 ## Templates
 
 ### `templates/app-store-listing.md`

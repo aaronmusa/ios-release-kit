@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Runs the fast test suite before every push, so a broken commit does not reach
+# a branch someone else — or a cloud build — picks up.
+#
+# Keep this to the suite that runs in seconds without a simulator. A pre-push
+# hook that takes three minutes gets bypassed with --no-verify, and a hook that
+# is routinely bypassed is worse than no hook at all.
+
+set -eo pipefail
+
+root=$(git rev-parse --show-toplevel)
+cd "$root"
+
+# A Swift package builds and tests without a simulator, so it is the right thing
+# to gate on. Point this at whichever package holds the logic worth protecting.
+package="{{PACKAGE_DIR}}"
+
+if [ -d "$package" ] && [ -f "$package/Package.swift" ]; then
+  echo "pre-push: swift test ($package)"
+  cd "$package"
+  swift test --parallel 2>&1 | tail -n 20
+else
+  echo "pre-push: no package at '$package', skipping tests" >&2
+fi
