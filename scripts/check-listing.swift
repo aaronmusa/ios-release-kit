@@ -84,4 +84,24 @@ for field in fields {
     print("\(name)  \(counts)\(verdict)")
 }
 
+let competitorBrands: [String] = []
+let forbiddenEverywhere = ["best", "#1", "number one"] + competitorBrands
+let forbiddenInTitle = ["free", "$", "price", "sale"]
+
+func words(_ text: String) -> String {
+    " " + text.lowercased().map { $0.isLetter || $0.isNumber || $0 == "#" || $0 == "$" ? $0 : " " }.reduce(into: "") { $0.append($1) } + " "
+}
+
+for field in fields {
+    let padded = words(field.value)
+    let isTitle = ["name", "subtitle"].contains(field.name.lowercased())
+    for word in forbiddenEverywhere + (isTitle ? forbiddenInTitle : []) {
+        let needle = word.count == 1 ? word : " \(word) "
+        if padded.contains(needle) {
+            hasFailure = true
+            print("\(field.name): forbidden \"\(word)\"")
+        }
+    }
+}
+
 exit(hasFailure ? 1 : 0)

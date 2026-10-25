@@ -16,8 +16,12 @@ the tag a cloud build watches.
 ```
 ./bump-build.sh                      # bump by one
 ./bump-build.sh --to 42              # set explicitly
-./bump-build.sh --tag ci/testflight  # bump, then move and force-push the tag
+./bump-build.sh --tag ci/testflight       # bump, then move and force-push the tag
+./bump-build.sh --tag-only ci/testflight  # move the tag to a clean HEAD, no bump
 ```
+
+`--tag-only` is for shipping a bump that already landed through a pull request:
+the build number changes in review, and the tag moves afterwards on `main`.
 
 The tag is a moving pointer, not a release marker, so re-triggering is a force
 push. It refuses to move the tag while the working tree is dirty, because a tag
@@ -42,7 +46,10 @@ size, and the shot list. Defaults are 1320x2868, the 6.9" size that App Store
 Connect scales down for every other device.
 
 Apple requires the screen itself to be the real app, so captures are drawn
-untouched and only the surround is generated.
+untouched and only the surround is generated. A shot can add an optional
+`"image"` (`{file, width, centreX, centreY}`, points from the top left, file
+relative to the config) drawn over the device, such as a mascot. A missing
+capture is skipped with a warning rather than failing the whole set.
 
 ### `scripts/capture-shots.sh`
 
@@ -69,7 +76,10 @@ xcrun swift check-listing.swift app-store-listing.md
 ```
 
 Reads `templates/app-store-listing.md`: a heading with a limit in parentheses,
-then a fenced block holding the value. Exits non-zero if anything is over.
+then a fenced block holding the value. Exits non-zero if anything is over, or
+if a field uses a word App Review rejects: "best", "#1" or "number one"
+anywhere, and "free", "$", "price" or "sale" in the name or subtitle. Add
+competitors' names to `competitorBrands` at the top of that check.
 
 Worth knowing, because it is not documented anywhere obvious: an **in-app
 purchase description is capped at 55 characters**, not the ~170 the app-level
