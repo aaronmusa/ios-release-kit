@@ -6,7 +6,9 @@
 //
 //   xcrun swift make-store-shots.swift shots.json <captures-dir> <output-dir>
 //
-// See templates/store-shots.json for the configuration shape.
+// See templates/store-shots.json for the configuration shape. A shot's optional
+// "image" ({file, width, centreX, centreY}, points from the top left, file
+// relative to the config) is drawn over the device, e.g. the mascot.
 
 import CoreGraphics
 import CoreText
@@ -28,10 +30,18 @@ struct Configuration: Decodable {
         let bezel: String
     }
 
+    struct Overlay: Decodable {
+        let file: String
+        let width: Double
+        let centreX: Double
+        let centreY: Double
+    }
+
     struct Shot: Decodable {
         let capture: String
         let output: String
         let caption: String
+        let image: Overlay?
     }
 
     let canvas: Size
@@ -89,11 +99,27 @@ func loadFont(size: CGFloat) -> CTFont {
     return CTFontCreateWithGraphicsFont(font, size, nil, nil)
 }
 
-func loadImage(_ url: URL) -> CGImage {
+func drawOverlay(
+    _ overlay: Configuration.Overlay,
+    in context: CGContext
+) {
+    let url = configURL.deletingLastPathComponent().appendingPathComponent(overlay.file)
+    guard let image = loadImage(url) else { return }
+    let height = overlay.width * Double(image.height) / Double(image.width)
+    let rect = CGRect(
+        x: overlay.centreX - overlay.width / 2,
+        y: canvas.height - overlay.centreY - height / 2,
+        width: overlay.width,
+        height: height
+    )
+    context.draw(image, in: rect)
+}
+
+func loadImage(_ url: URL) -> CGImage? {
     guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
           let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
-        FileHandle.standardError.write(Data("could not read \(url.path)\n".utf8))
-        exit(1)
+        FileHandle.standardError.write(Data("skipping \(url.lastPathComponent): no capture at \(url.path)\n".utf8))
+        return nil
     }
     return image
 }
@@ -235,7 +261,7 @@ func write(_ image: CGImage, to url: URL) {
 try? FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
 
 for shot in config.shots {
-    let screen = loadImage(capturesDirectory.appendingPathComponent(shot.capture))
+    guard let screen = loadImage(capturesDirectory.appendingPathComponent(shot.capture)) else { continue }
     guard let context = CGContext(
         data: nil,
         width: Int(canvas.width),
@@ -251,6 +277,9 @@ for shot in config.shots {
     drawBackground(in: context)
     drawCaption(shot.caption, in: context)
     drawDevice(screen, in: context)
+    if let overlay = shot.image {
+        drawOverlay(overlay, in: context)
+    }
 
     guard let image = context.makeImage() else { fatalError("Could not render \(shot.output)") }
     let url = outputDirectory.appendingPathComponent(shot.output)
