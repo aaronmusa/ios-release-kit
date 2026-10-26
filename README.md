@@ -17,7 +17,11 @@ the tag a cloud build watches.
 ./bump-build.sh                      # bump by one
 ./bump-build.sh --to 42              # set explicitly
 ./bump-build.sh --tag ci/testflight  # bump, then move and force-push the tag
+./bump-build.sh --tag-only ci/testflight  # move the tag to a clean HEAD without bumping
 ```
+
+`--tag-only` is for a bump that already landed through a PR: run it on an
+up-to-date `main` to trigger the cloud build.
 
 The tag is a moving pointer, not a release marker, so re-triggering is a force
 push. It refuses to move the tag while the working tree is dirty, because a tag
@@ -40,6 +44,13 @@ xcrun swift make-store-shots.swift shots.json captures/ out/
 Config shape is `templates/store-shots.json` — canvas, palette, font, caption
 size, and the shot list. Defaults are 1320x2868, the 6.9" size that App Store
 Connect scales down for every other device.
+
+For iPad and Apple Watch sets, write one config per device with its own canvas
+and `"device": "pad"` or `"watch"`, which changes the drawn body. Offsets scale
+with the canvas width, so the same layout holds from a 422 px watch to a 2064 px
+iPad. `fontPath` is optional (the bold system font is used without it), palette
+colours take `#RRGGBBAA`, and the optional `lines` and `edge` colours set the
+faint court lines and the device's edge highlight, so a light field works too.
 
 Apple requires the screen itself to be the real app, so captures are drawn
 untouched and only the surround is generated.
@@ -69,7 +80,9 @@ xcrun swift check-listing.swift app-store-listing.md
 ```
 
 Reads `templates/app-store-listing.md`: a heading with a limit in parentheses,
-then a fenced block holding the value. Exits non-zero if anything is over.
+then a fenced block holding the value. Exits non-zero if anything is over, or if
+a field uses words App Review rejects in metadata ("best", "#1", "number one"
+anywhere; "free", "price", "sale" or "$" in the name or subtitle).
 
 Worth knowing, because it is not documented anywhere obvious: an **in-app
 purchase description is capped at 55 characters**, not the ~170 the app-level
